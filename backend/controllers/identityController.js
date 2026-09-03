@@ -26,11 +26,16 @@ const createTestIdentity = async (req, res) => {
     } catch (error) {
         console.error("Identity creation error:", error.message);
 
-        res.status(500).json({
+        const payload = {
             success: false,
-            message: "Failed to create identity",
-            error: error.message
-        });
+            message: "Failed to create identity"
+        };
+
+        if (process.env.NODE_ENV !== "production") {
+            payload.error = error.message;
+        }
+
+        res.status(500).json(payload);
     }
 };
 
